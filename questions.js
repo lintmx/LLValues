@@ -13,7 +13,7 @@ questions =  [
     {"id": 12, "question": "Doing excessive Wotagei movements (like the Thunder Snake or Cyclone) in a cramped arena seat is totally justified if the song goes hard.", "effects": {"yakkai": 1}},
     {"id": 13, "question": "Cracking an entire 25-pack box of UOs over the course of a single concert is normal behavior for a dedicated fan.", "effects": {"yakkai": 1}},
     {"id": 14, "question": "Screaming an idol's name at the top of my lungs while they are trying to do a quiet, emotional MC is completely acceptable.", "effects": {"yakkai": 1}},
-    {"id": 15, "question": "Sneaking in a modified, excessively bright penlight that exceeds venue regulations [cite: 103] is a great idea to make my oshi notice me from the stage.", "effects": {"yakkai": 1}},
+    {"id": 15, "question": "Sneaking in a modified, excessively bright penlight that exceeds venue regulations is a great idea to make my oshi notice me from the stage.", "effects": {"yakkai": 1}},
     {"id": 16, "question": "I care more about front-row arena seats to look at the performers' legs than actually hearing the live band and vocals.", "effects": {"degenerate": 1}},
     {"id": 17, "question": "Spamming the Gachikoi Koujou ('Iitai koto ga arunda yo...') directly at my oshi during a slow solo ballad is the best way to show my true love.", "effects": {"yakkai": 1, "degenerate": 1}},
     {"id": 18, "question": "The performers' personal lives are none of my business, and I don't care who they date or associate with off-stage.", "effects": {"degenerate": -1}},
