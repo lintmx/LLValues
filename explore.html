@@ -8,20 +8,37 @@
     <script src="i18n.js"></script>
     <script src="config.js"></script>
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        h1.title {
+            font-size: 36pt;
+            line-height: 36pt;
+            margin: 4px 0;
+        }
         #exploreLayout {
             display: flex;
             gap: 16px;
-            margin: 8pt auto;
+            margin: 4px auto;
             max-width: 90%;
-            align-items: flex-start;
+            width: 90%;
+            flex: 1;
+            min-height: 0;
+            align-items: stretch;
         }
         #canvasWrapper {
             position: relative;
             flex: 1;
             min-width: 0;
+            min-height: 0;
         }
         #exploreCanvas {
-            width: 100%;
+            max-width: 100%;
+            max-height: 100%;
             border: 2px solid #444;
             border-radius: 8pt;
             cursor: crosshair;
@@ -30,12 +47,24 @@
         #resultsTableWrapper {
             width: 300px;
             flex-shrink: 0;
-            max-height: 600px;
             overflow-y: auto;
             border: 2px solid #888;
             border-radius: 8pt;
             background: #eee;
             display: none;
+        }
+        #exploreButtons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 4px auto;
+        }
+        #exploreButtons .button {
+            width: auto;
+            min-width: 0;
+            padding: 6px 24px;
+            font-size: 16pt;
+            margin: 0;
         }
         #resultsTable {
             width: 100%;
@@ -57,8 +86,11 @@
             background: #555;
         }
         #resultsTable th .sort-arrow {
-            margin-left: 4px;
+            display: inline-block;
+            width: 1.2em;
+            text-align: center;
             font-size: 9pt;
+            vertical-align: middle;
         }
         #resultsTable td {
             padding: 4px 8px;
@@ -82,13 +114,13 @@
         }
         #zoomControls {
             text-align: center;
-            margin: 4px 0;
+            margin: 2px 0;
             display: none;
         }
         #zoomControls button {
             font-family: system-ui, sans-serif;
-            font-size: 14pt;
-            padding: 4px 12px;
+            font-size: 12pt;
+            padding: 2px 10px;
             margin: 0 4px;
             cursor: pointer;
             border: 1px solid #888;
@@ -99,13 +131,30 @@
             background: #ddd;
         }
         @media screen and (orientation:portrait) {
+            body {
+                height: auto;
+                overflow: auto;
+            }
             #exploreLayout {
                 flex-direction: column;
                 max-width: 100%;
+                flex: none;
+            }
+            #exploreCanvas {
+                width: 100%;
+                max-height: none;
             }
             #resultsTableWrapper {
                 width: 100%;
                 max-height: 400px;
+            }
+            #exploreButtons {
+                flex-direction: column;
+                align-items: center;
+            }
+            #exploreButtons .button {
+                width: 100%;
+                min-width: 0;
             }
         }
     </style>
@@ -123,9 +172,9 @@
         <text x="50%" y="15" class="svgHeader" data-i18n="explore_title">Explore</text>
     </svg>
 
-    <p id="statsBar" style="text-align:center; font-size:14pt; color:#555; margin:8px auto;"></p>
-    <p id="loadingText" style="text-align:center; font-size:18pt; color:#555;" data-i18n="loading_results">Loading community results...</p>
-    <p id="errorText" style="text-align:center; font-size:16pt; color:#e53935; display:none;"></p>
+    <p id="statsBar" style="text-align:center; font-size:12pt; color:#555; margin:2px auto;"></p>
+    <p id="loadingText" style="text-align:center; font-size:16pt; color:#555;" data-i18n="loading_results">Loading community results...</p>
+    <p id="errorText" style="text-align:center; font-size:14pt; color:#e53935; display:none;"></p>
 
     <div id="zoomControls">
         <button onclick="zoomIn()">+</button>
@@ -147,8 +196,10 @@
         </div>
     </div>
 
-    <button class="button" onclick="location.href='index.html';" style="background-color: #2196f3; margin-top:8px;" data-i18n="home">Home</button> <br>
-    <button class="button" onclick="location.href='instructions.html';" style="background-color: #4caf50; margin-top:8px;" data-i18n="take_quiz">Take the Quiz</button> <br>
+    <div id="exploreButtons">
+        <button class="button" onclick="location.href='index.html';" style="background-color: #2196f3;" data-i18n="home">Home</button>
+        <button class="button" onclick="location.href='instructions.html';" style="background-color: #4caf50;" data-i18n="take_quiz">Take the Quiz</button>
+    </div>
 
     <script>
     injectLangToggle();
@@ -379,12 +430,14 @@
             for (var i = 0; i < ths.length; i++) {
                 var existing = ths[i].querySelector(".sort-arrow");
                 if (existing) existing.remove();
+                var arrow = document.createElement("span");
+                arrow.className = "sort-arrow";
                 if (ths[i].getAttribute("data-col") === sortCol) {
-                    var arrow = document.createElement("span");
-                    arrow.className = "sort-arrow";
                     arrow.textContent = sortAsc ? "\u25B2" : "\u25BC";
-                    ths[i].appendChild(arrow);
+                } else {
+                    arrow.textContent = "\u25B2\u25BC";
                 }
+                ths[i].appendChild(arrow);
             }
         }
 
