@@ -20,19 +20,21 @@
 		<text x="50%" y="15" class="svgHeader">Results</text>
 	</svg>
 
-    <img src="" id="banner" style="max-width:70%;height:auto;display:block;margin:0 auto"></canvas></br>
-    <p style="text-align:center;margin:-2px auto">Hint: you can download this image directly. No need to screenshot!</p></br>
-    <button class="button" onclick="location.href='index.html';" style="background-color: #2196f3;">Back</button> <br>
-
     <div id="shareSection" style="display:none; text-align:center; margin-top:16px;">
-        <p style="font-size:14pt; color:#555;">Share your result with the community (optional)</p>
-        <input type="text" id="nicknameInput" maxlength="30" placeholder="Nickname (optional)"
+        <p style="font-size:14pt; color:#555;">Enter a nickname to see your results</p>
+        <input type="text" id="nicknameInput" maxlength="30" placeholder="Nickname (required)"
             style="font-family:system-ui,sans-serif; font-size:16pt; padding:8pt; border:2px solid #888; border-radius:8pt; width:300px; max-width:80%; text-align:center; margin:8px auto; display:block;">
-        <button id="shareBtn" class="button green_button" style="margin-top:8px;">Share My Result</button>
+        <p id="nicknameError" style="font-size:12pt; color:#e53935; min-height:18px;"></p>
+        <button id="shareBtn" class="button green_button" style="margin-top:8px;">Submit</button>
         <p id="shareStatus" style="font-size:14pt; color:#555; min-height:20px;"></p>
     </div>
 
-    <button class="button" onclick="location.href='explore.html';" style="background-color: #9c27b0; margin-top:8px;" id="exploreBtn">Explore Community Results</button> <br>
+    <div id="resultsSection" style="display:none;">
+        <img src="" id="banner" style="max-width:70%;height:auto;display:block;margin:0 auto"></canvas></br>
+        <p style="text-align:center;margin:-2px auto">Hint: you can download this image directly. No need to screenshot!</p></br>
+        <button class="button" onclick="location.href='index.html';" style="background-color: #2196f3;">Back</button> <br>
+        <button class="button" onclick="location.href='explore.html';" style="background-color: #9c27b0; margin-top:8px;" id="exploreBtn">Explore Community Results</button> <br>
+    </div>
 
 
     <script>
@@ -83,16 +85,37 @@
             background.src = "./compass.png";
 
             // Share section logic
-            if (SHARE_CONFIG.enabled && !isNaN(rawDegenerate) && !isNaN(rawYakkai)) {
+            function showResults() {
+                document.getElementById("shareSection").style.display = "none";
+                document.getElementById("resultsSection").style.display = "block";
+            }
+
+            if (!isNaN(rawDegenerate) && !isNaN(rawYakkai)) {
                 var shareKey = "shared_" + rawDegenerate + "_" + rawYakkai;
-                if (!sessionStorage.getItem(shareKey)) {
+                if (sessionStorage.getItem(shareKey)) {
+                    // Already submitted — show results directly
+                    showResults();
+                } else {
                     document.getElementById("shareSection").style.display = "block";
                 }
+
+                // Clear error on typing
+                document.getElementById("nicknameInput").addEventListener("input", function() {
+                    document.getElementById("nicknameError").textContent = "";
+                });
 
                 document.getElementById("shareBtn").addEventListener("click", function() {
                     var btn = this;
                     var status = document.getElementById("shareStatus");
-                    var nickname = document.getElementById("nicknameInput").value.trim().substring(0, 30);
+                    var nicknameInput = document.getElementById("nicknameInput");
+                    var nickname = nicknameInput.value.trim().substring(0, 30);
+
+                    if (!nickname) {
+                        document.getElementById("nicknameError").textContent = "Please enter a nickname.";
+                        nicknameInput.focus();
+                        return;
+                    }
+
                     var sessionId = sessionStorage.getItem("llv_session_id");
                     if (!sessionId) {
                         sessionId = Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -100,37 +123,41 @@
                     }
 
                     btn.disabled = true;
-                    status.textContent = "Sharing...";
+                    status.textContent = "Submitting...";
                     status.style.color = "#555";
 
-                    fetch(SHARE_CONFIG.appsScriptUrl, {
-                        method: "POST",
-                        redirect: "follow",
-                        headers: { "Content-Type": "text/plain" },
-                        body: JSON.stringify({
-                            degenerate: rawDegenerate,
-                            yakkai: rawYakkai,
-                            nickname: nickname,
-                            sessionId: sessionId
+                    if (SHARE_CONFIG.enabled) {
+                        fetch(SHARE_CONFIG.appsScriptUrl, {
+                            method: "POST",
+                            redirect: "follow",
+                            headers: { "Content-Type": "text/plain" },
+                            body: JSON.stringify({
+                                degenerate: rawDegenerate,
+                                yakkai: rawYakkai,
+                                nickname: nickname,
+                                sessionId: sessionId
+                            })
                         })
-                    })
-                    .then(function(res) { return res.json(); })
-                    .then(function(data) {
-                        if (data.status === "ok") {
-                            status.textContent = "Shared! Thanks for contributing.";
-                            status.style.color = "#4caf50";
-                            sessionStorage.setItem(shareKey, "1");
-                        } else {
-                            status.textContent = data.message || "Something went wrong.";
+                        .then(function(res) { return res.json(); })
+                        .then(function(data) {
+                            if (data.status === "ok") {
+                                sessionStorage.setItem(shareKey, "1");
+                                showResults();
+                            } else {
+                                status.textContent = data.message || "Something went wrong.";
+                                status.style.color = "#e53935";
+                                btn.disabled = false;
+                            }
+                        })
+                        .catch(function() {
+                            status.textContent = "Network error. Please try again.";
                             status.style.color = "#e53935";
                             btn.disabled = false;
-                        }
-                    })
-                    .catch(function() {
-                        status.textContent = "Network error. Please try again.";
-                        status.style.color = "#e53935";
-                        btn.disabled = false;
-                    });
+                        });
+                    } else {
+                        sessionStorage.setItem(shareKey, "1");
+                        showResults();
+                    }
                 });
             }
         }
