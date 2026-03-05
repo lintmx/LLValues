@@ -6,7 +6,9 @@
     <link href='style.css' rel='stylesheet' type='text/css'>
     <link rel="icon" type="x-icon" href="icon.png">
     <link rel="shortcut icon" type="x-icon" href="icon.png">
+    <script src="i18n.js"></script>
     <script type="application/javascript" src="questions_feedback.js"></script>
+    <script type="application/javascript" src="questions_feedback_ja.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -19,14 +21,14 @@
 	</svg>
 <hr>
 
-<h2 style="text-align:center;" id="question-number">All done!</h2>
-<p class="question" id="question-text">Did you complete this test in a serious (or at least unironic) manner?</p>
+<h2 style="text-align:center;" id="question-number" data-i18n="all_done">All done!</h2>
+<p class="question" id="question-text" data-i18n="feedback_initial_question">Did you complete this test in a serious (or at least unironic) manner?</p>
 <div id="answers">
-    <button class="button" onclick="pass()" style="background-color: #4caf50;">See my results!</button> <br>
-    <button class="button" id="quiz" onclick="location.href='quiz.html';" style="background-color: #4caf50; display: none;">Do the quiz!</button> <br>
+    <button class="button" onclick="pass()" style="background-color: #4caf50;" data-i18n="see_results">See my results!</button> <br>
+    <button class="button" id="quiz" onclick="location.href='quiz.html';" style="background-color: #4caf50; display: none;" data-i18n="do_quiz">Do the quiz!</button> <br>
 </div>
-<button class="small_button" onclick="prev_question()" id="back_button" style="display: none;">Back</button>
-<button class="small_button_off" id="back_button_off" style="display: none;">Back</button><br>
+<button class="small_button" onclick="prev_question()" id="back_button" style="display: none;" data-i18n="back">Back</button>
+<button class="small_button_off" id="back_button_off" style="display: none;" data-i18n="back">Back</button><br>
 
 <!-- Test JS -->
 <script>
@@ -57,6 +59,7 @@
 
     var questionsOrder = Object.keys(questionsObject);
 
+    applyTranslations();
 
     // Init question
     function init_question() {
@@ -64,10 +67,15 @@
             location.href = 'quiz.html';
         }
         var current = questionsObject[questionsOrder[qn]];
+        var qId = questionsOrder[qn];
         var answersDiv = document.getElementById("answers");
 
-        document.getElementById("question-text").innerHTML = current.question;
-        document.getElementById("question-number").innerHTML = "Question "+(qn + 1)+" of "+(questionsOrder.length);
+        var qText = current.question;
+        if (getLang() === 'ja' && questions_feedback_ja && questions_feedback_ja[qId] && questions_feedback_ja[qId].question) {
+            qText = questions_feedback_ja[qId].question;
+        }
+        document.getElementById("question-text").innerHTML = qText;
+        document.getElementById("question-number").innerHTML = t("question_n_of_m", {n: qn + 1, m: questionsOrder.length});
 
         answersDiv.innerHTML = "";
 
@@ -82,7 +90,7 @@
             defaultOpt.value = "null";
             defaultOpt.disabled = true;
             defaultOpt.selected = true;
-            defaultOpt.textContent = "Click to choose";
+            defaultOpt.textContent = t("click_to_choose");
             select.appendChild(defaultOpt);
 
             for (var key in current.answers) {
@@ -100,10 +108,10 @@
             goBtn.onclick = function() { next_question(getActiveDropdown()); };
             goBtn.style.backgroundColor = "#4caf50";
             goBtn.style.display = "none";
-            goBtn.textContent = "Go!";
+            goBtn.textContent = t("go_button");
             answersDiv.appendChild(goBtn);
             answersDiv.appendChild(document.createElement("br"));
-            createButton({"label":"Refuse","color":"#a9a9a9","effect":null});
+            createButton({"label":t("refuse"),"color":"#a9a9a9","effect":null});
 
             select.addEventListener("change", function() {
                 document.getElementById("go").style.display = "";
@@ -125,10 +133,10 @@
             goBtn.className = "button green_button";
             goBtn.id = "go";
             goBtn.onclick = function() { next_question(getActiveNumber()); };
-            goBtn.textContent = "Next!";
+            goBtn.textContent = t("next_button");
             answersDiv.appendChild(goBtn);
             answersDiv.appendChild(document.createElement("br"));
-            createButton({"label":"Refuse","color":"#a9a9a9","effect":null});
+            createButton({"label":t("refuse"),"color":"#a9a9a9","effect":null});
 
             numInput.addEventListener("input", function() {
                 var nr = Number(getActiveNumber());
@@ -149,10 +157,10 @@
             goBtn.className = "button green_button";
             goBtn.id = "go";
             goBtn.onclick = function() { next_question(getActiveText()); };
-            goBtn.textContent = "Next!";
+            goBtn.textContent = t("next_button");
             answersDiv.appendChild(goBtn);
             answersDiv.appendChild(document.createElement("br"));
-            createButton({"label":"Refuse / Don't know","color":"#a9a9a9","effect":null});
+            createButton({"label":t("refuse_dont_know"),"color":"#a9a9a9","effect":null});
 
             textInput.addEventListener("input", function() {
                 document.getElementById("go").disabled = getActiveText().length === 0;
@@ -201,7 +209,12 @@
         var btn = document.createElement("button");
         btn.className = "button";
         btn.style.backgroundColor = buttonInfo["color"];
-        btn.textContent = buttonInfo["label"];
+        var label = buttonInfo["label"];
+        var qId = questionsOrder[qn];
+        if (getLang() === 'ja' && questions_feedback_ja && questions_feedback_ja[qId] && questions_feedback_ja[qId].answers && questions_feedback_ja[qId].answers[label]) {
+            label = questions_feedback_ja[qId].answers[label];
+        }
+        btn.textContent = label;
         if (buttonInfo["effect"] === null || Number.isInteger(buttonInfo["effect"])) {
             btn.onclick = function() { next_question(buttonInfo["effect"]); };
         } else {

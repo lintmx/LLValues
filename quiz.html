@@ -6,7 +6,9 @@
     <link rel="icon" type="x-icon" href="icon.png">
     <link rel="shortcut icon" type="x-icon" href="icon.png">
 
+    <script src="i18n.js"></script>
     <script type="application/javascript" src="questions.js"></script>
+    <script type="application/javascript" src="questions_ja.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -19,13 +21,13 @@
 <hr>
 <h2 style="text-align:center;" id="question-number">Loading...</h2>
 <p class="question" id="question-text"></p>
-<button class="button" onclick="next_question(1.0)" style="background-color: #1b5e20;">Strongly Agree</button> <br>
-<button class="button" onclick="next_question(0.5)" style="background-color: #4caf50;">Agree</button> <br>
-<button class="button" onclick="next_question(0)" style="background-color: #bbbbbb;">Neutral / Unsure</button> <br>
-<button class="button" onclick="next_question(-0.5)" style="background-color: #f44336;">Disagree</button> <br>
-<button class="button" onclick="next_question(-1.0)" style="background-color: #b71c1c;">Strongly Disagree</button> <br>
-<button class="small_button" onclick="prev_question()" id="back_button">Back</button>
-<button class="small_button_off" id="back_button_off">Back</button><br>
+<button class="button" onclick="next_question(1.0)" style="background-color: #1b5e20;" data-i18n="strongly_agree">Strongly Agree</button> <br>
+<button class="button" onclick="next_question(0.5)" style="background-color: #4caf50;" data-i18n="agree">Agree</button> <br>
+<button class="button" onclick="next_question(0)" style="background-color: #bbbbbb;" data-i18n="neutral">Neutral / Unsure</button> <br>
+<button class="button" onclick="next_question(-0.5)" style="background-color: #f44336;" data-i18n="disagree">Disagree</button> <br>
+<button class="button" onclick="next_question(-1.0)" style="background-color: #b71c1c;" data-i18n="strongly_disagree">Strongly Disagree</button> <br>
+<button class="small_button" onclick="prev_question()" id="back_button" data-i18n="back">Back</button>
+<button class="small_button_off" id="back_button_off" data-i18n="back">Back</button><br>
 
 <script>
     // variables
@@ -61,11 +63,17 @@
 
     // Question initialization
 
+    applyTranslations();
     init_question();
 
     function init_question() {
-        document.getElementById("question-text").innerHTML = questionsObject[questionsOrder[qn]].question;
-        document.getElementById("question-number").innerHTML = "Question "+(qn + 1)+" of "+(questionsOrder.length);
+        var qId = questionsOrder[qn];
+        var qText = questionsObject[qId].question;
+        if (getLang() === 'ja' && questions_ja && questions_ja[qId]) {
+            qText = questions_ja[qId];
+        }
+        document.getElementById("question-text").innerHTML = qText;
+        document.getElementById("question-number").innerHTML = t("question_n_of_m", {n: qn + 1, m: questionsOrder.length});
 
         if (Object.keys(answers).length === 0) {
             document.getElementById("back_button").style.display = "none";

@@ -1,3 +1,21 @@
+#langToggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1000;
+    background: #333;
+    color: #fff;
+    border: 2px solid #555;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 13pt;
+    cursor: pointer;
+}
+#langToggle:hover {
+    background: #555;
+}
+
 html {
     background-color: #bbbbbb;
     padding: 0px;

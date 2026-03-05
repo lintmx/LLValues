@@ -5,6 +5,7 @@
     <link rel="shortcut icon" type="x-icon" href="icon.png">
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="i18n.js"></script>
     <script src="config.js"></script>
     </head>
 
@@ -15,25 +16,25 @@
     </svg>
     <hr>
 
-	<h1 class="title">Results</h1>
+	<h1 class="title" data-i18n="results_title">Results</h1>
     <svg id="svgHeader" style="width: 100%;" viewBox="0 0 112 19">
-		<text x="50%" y="15" class="svgHeader">Results</text>
+		<text x="50%" y="15" class="svgHeader" data-i18n="results_title">Results</text>
 	</svg>
 
     <div id="shareSection" style="display:none; text-align:center; margin-top:16px;">
-        <p style="font-size:14pt; color:#555;">Enter a nickname to see your results</p>
-        <input type="text" id="nicknameInput" maxlength="30" placeholder="Nickname (required)"
+        <p style="font-size:14pt; color:#555;" data-i18n="enter_nickname">Enter a nickname to see your results</p>
+        <input type="text" id="nicknameInput" maxlength="30" data-i18n-placeholder="nickname_placeholder" placeholder="Nickname (required)"
             style="font-family:system-ui,sans-serif; font-size:16pt; padding:8pt; border:2px solid #888; border-radius:8pt; width:300px; max-width:80%; text-align:center; margin:8px auto; display:block;">
         <p id="nicknameError" style="font-size:12pt; color:#e53935; min-height:18px;"></p>
-        <button id="shareBtn" class="button green_button" style="margin-top:8px;">Submit</button>
+        <button id="shareBtn" class="button green_button" style="margin-top:8px;" data-i18n="submit">Submit</button>
         <p id="shareStatus" style="font-size:14pt; color:#555; min-height:20px;"></p>
     </div>
 
     <div id="resultsSection" style="display:none;">
         <img src="" id="banner" style="max-width:70%;height:auto;display:block;margin:0 auto"></canvas></br>
-        <p style="text-align:center;margin:-2px auto">Hint: you can download this image directly. No need to screenshot!</p></br>
-        <button class="button" onclick="location.href='index.html';" style="background-color: #2196f3;">Back</button> <br>
-        <button class="button" onclick="location.href='explore.html';" style="background-color: #9c27b0; margin-top:8px;" id="exploreBtn">Explore Community Results</button> <br>
+        <p style="text-align:center;margin:-2px auto" data-i18n="hint_download">Hint: you can download this image directly. No need to screenshot!</p></br>
+        <button class="button" onclick="location.href='index.html';" style="background-color: #2196f3;" data-i18n="results_back">Back</button> <br>
+        <button class="button" onclick="location.href='explore.html';" style="background-color: #9c27b0; margin-top:8px;" id="exploreBtn" data-i18n="results_explore">Explore Community Results</button> <br>
     </div>
 
 
@@ -44,6 +45,8 @@
         x_axis  = -rawDegenerate;
         y_axis  = rawYakkai;
         window.onload = function() {
+            injectLangToggle();
+            applyTranslations();
             var background = new Image();
             background.onload = function() {
                 var c = document.createElement("canvas");
@@ -64,8 +67,8 @@
                 ctx.font="50px Montserrat"
                 ctx.textAlign="center"
                 ctx.fillStyle="#222222"
-                ctx.fillText("Degenerate / Civilzed Axis (x): " + x_axis, 725, 1350)
-                ctx.fillText("Yakkai / Boring Axis (y): " + y_axis, 725, 1420)
+                ctx.fillText(t("compass_x_axis") + x_axis, 725, 1350)
+                ctx.fillText(t("compass_y_axis") + y_axis, 725, 1420)
                 ctx.textAlign="right"
                 ctx.font="60px Montserrat"
                 ctx.fillText("LoveLiveValues.github.io", 1820, 1470)
@@ -82,7 +85,7 @@
                     c.style.margin = "0 auto";
                 }
             }
-            background.src = "./compass.png";
+            background.src = getLang() === 'ja' ? './compass_ja.png' : './compass.png';
 
             // Share section logic
             function showResults() {
@@ -111,7 +114,7 @@
                     var nickname = nicknameInput.value.trim().substring(0, 30);
 
                     if (!nickname) {
-                        document.getElementById("nicknameError").textContent = "Please enter a nickname.";
+                        document.getElementById("nicknameError").textContent = t("nickname_error");
                         nicknameInput.focus();
                         return;
                     }
@@ -123,7 +126,7 @@
                     }
 
                     btn.disabled = true;
-                    status.textContent = "Submitting...";
+                    status.textContent = t("submitting");
                     status.style.color = "#555";
 
                     if (SHARE_CONFIG.enabled) {
@@ -150,7 +153,7 @@
                             }
                         })
                         .catch(function() {
-                            status.textContent = "Network error. Please try again.";
+                            status.textContent = t("network_error");
                             status.style.color = "#e53935";
                             btn.disabled = false;
                         });

@@ -54,23 +54,6 @@ function doPost(e) {
       }
     }
 
-    // If nickname is provided, check for existing row with same nickname and update it
-    if (nickname) {
-      var lastRow = sheet.getLastRow();
-      if (lastRow >= 2) {
-        var nicknames = sheet.getRange(2, 4, lastRow - 1, 1).getValues(); // column D = nickname
-        for (var j = 0; j < nicknames.length; j++) {
-          if (String(nicknames[j][0]).trim() === nickname) {
-            var rowNum = j + 2;
-            sheet.getRange(rowNum, 1, 1, 5).setValues([[new Date(), degenerate, yakkai, nickname, sessionId]]);
-            return ContentService.createTextOutput(JSON.stringify({ status: "ok" }))
-              .setMimeType(ContentService.MimeType.JSON);
-          }
-        }
-      }
-    }
-
-    // No existing nickname found (or no nickname), append new row
     sheet.appendRow([new Date(), degenerate, yakkai, nickname, sessionId]);
 
     return ContentService.createTextOutput(JSON.stringify({ status: "ok" }))

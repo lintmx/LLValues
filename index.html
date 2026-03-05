@@ -5,6 +5,7 @@
     <link rel="shortcut icon" type="x-icon" href="icon.png">
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="i18n.js"></script>
 </head>
 
 <body>
@@ -14,28 +15,30 @@
 	</svg>
     <hr>
     <img src="" id="banner">
-    <button class="button" onclick="location.href='instructions.html';">Click here to start!</button>
-    <button class="button" onclick="location.href='explore.html';" style="background-color: #9c27b0; margin-top:8px;">Explore Community Results</button>
+    <button class="button" onclick="location.href='instructions.html';" data-i18n="start_button">Click here to start!</button>
+    <button class="button" onclick="location.href='explore.html';" style="background-color: #9c27b0; margin-top:8px;" data-i18n="explore_button">Explore Community Results</button>
 
-    <h2>What is LoveLiveValues?</h2>
-    <p>LoveLiveValues is a compass test for Love Live fans and concert goers. Inspired by <a href="http://sapplypoliticalcompass.com/">SapplyValues</a>, it places you on two axes based on your opinions and concert behaviour.</p>
-    <p>You will be presented with a series of statements. For each one, answer from <b>Strongly Agree</b> to <b>Strongly Disagree</b>, and your responses will determine where you land on the compass.</p>
-    <p>There are <b><u><span id="numOfQuestions"></span></u></b> questions in the test.</p>
+    <h2 data-i18n="what_is">What is LoveLiveValues?</h2>
+    <p data-i18n-html="description_para1">LoveLiveValues is a compass test for Love Live fans and concert goers. Inspired by <a href="http://sapplypoliticalcompass.com/">SapplyValues</a>, it places you on two axes based on your opinions and concert behaviour.</p>
+    <p data-i18n-html="description_para2">You will be presented with a series of statements. For each one, answer from <b>Strongly Agree</b> to <b>Strongly Disagree</b>, and your responses will determine where you land on the compass.</p>
+    <p id="numOfQuestionsP">There are <b><u><span id="numOfQuestions"></span></u></b> questions in the test.</p>
 
-    <h2>The Axes</h2>
-    <h3>Degenerate vs. Civilized (X axis)</h3>
-    <p><b>Degenerate</b> &mdash; You glaze over the idols, comment on their body parts, post things like "I wish to be stepped on by her", go "WOOOOOOAHHHHH" with no meaningful comment when a picture is posted, and are generally the definition of a simp.</p>
-    <p><b>Civilized</b> &mdash; You appreciate the idols and their performances without losing your composure. You can discuss them without devolving into glazing or simping.</p>
+    <h2 data-i18n="axes_title">The Axes</h2>
+    <h3 data-i18n="deg_vs_civ_title">Degenerate vs. Civilized (X axis)</h3>
+    <p data-i18n-html="deg_vs_civ_deg"><b>Degenerate</b> &mdash; You glaze over the idols, comment on their body parts, post things like "I wish to be stepped on by her", go "WOOOOOOAHHHHH" with no meaningful comment when a picture is posted, and are generally the definition of a simp.</p>
+    <p data-i18n-html="deg_vs_civ_civ"><b>Civilized</b> &mdash; You appreciate the idols and their performances without losing your composure. You can discuss them without devolving into glazing or simping.</p>
 
-    <h3>Yakkai vs. Boring (Y axis)</h3>
-    <p><b>Yakkai</b> &mdash; You do "ie taiga", mixing calls like "tora hi jinzou seni ama shindou kasen", gachikoi koujou, 3ren kahen, and similar calls that are common in 3D idol culture but frowned upon at Love Live concerts. You break UOs (Ultra Orange glowsticks) during slow songs when everyone else is waving blue, cyclone your penlight overhead during calm moments, and generally exhibit behaviour that makes your renbans (seat partners) uncomfortable.</p>
-    <p><b>Boring</b> &mdash; You don't jump during songs, never break UOs, just wave your electric penlight while standing still, and don't even do the classic calls like hai calls, PPPH, or fuwa fuwa. You're at the concert, but barely participating.</p>
+    <h3 data-i18n="yak_vs_bor_title">Yakkai vs. Boring (Y axis)</h3>
+    <p data-i18n-html="yak_vs_bor_yak"><b>Yakkai</b> &mdash; You do "ie taiga", mixing calls like "tora hi jinzou seni ama shindou kasen", gachikoi koujou, 3ren kahen, and similar calls that are common in 3D idol culture but frowned upon at Love Live concerts. You break UOs (Ultra Orange glowsticks) during slow songs when everyone else is waving blue, cyclone your penlight overhead during calm moments, and generally exhibit behaviour that makes your renbans (seat partners) uncomfortable.</p>
+    <p data-i18n-html="yak_vs_bor_bor"><b>Boring</b> &mdash; You don't jump during songs, never break UOs, just wave your electric penlight while standing still, and don't even do the classic calls like hai calls, PPPH, or fuwa fuwa. You're at the concert, but barely participating.</p>
 
     <script type="application/javascript" src="questions.js"></script>
     <script type="text/javascript">
-        document.getElementById("numOfQuestions").innerHTML = questions.length;
+        document.getElementById("numOfQuestionsP").innerHTML = t("num_questions", {n: questions.length});
 
         window.onload = function() {
+            injectLangToggle();
+            applyTranslations();
             var background = new Image();
             background.onload = function() {
                 var c = document.createElement("canvas");
@@ -48,7 +51,7 @@
 
                 document.getElementById("banner").src = c.toDataURL();
             }
-            background.src = "./compass.png";
+            background.src = getLang() === 'ja' ? './compass_ja.png' : './compass.png';
         }
     </script>
 </body>

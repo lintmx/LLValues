@@ -5,6 +5,7 @@
     <link rel="shortcut icon" type="x-icon" href="icon.png">
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="i18n.js"></script>
     <script src="config.js"></script>
     <style>
         #exploreLayout {
@@ -108,19 +109,19 @@
     </svg>
     <hr>
 
-    <h1 class="title">Explore</h1>
+    <h1 class="title" data-i18n="explore_title">Explore</h1>
     <svg id="svgHeader" style="width: 100%;" viewBox="0 0 112 19">
-        <text x="50%" y="15" class="svgHeader">Explore</text>
+        <text x="50%" y="15" class="svgHeader" data-i18n="explore_title">Explore</text>
     </svg>
 
     <p id="statsBar" style="text-align:center; font-size:14pt; color:#555; margin:8px auto;"></p>
-    <p id="loadingText" style="text-align:center; font-size:18pt; color:#555;">Loading community results...</p>
+    <p id="loadingText" style="text-align:center; font-size:18pt; color:#555;" data-i18n="loading_results">Loading community results...</p>
     <p id="errorText" style="text-align:center; font-size:16pt; color:#e53935; display:none;"></p>
 
     <div id="zoomControls">
         <button onclick="zoomIn()">+</button>
         <button onclick="zoomOut()">&minus;</button>
-        <button onclick="resetZoom()">Reset</button>
+        <button onclick="resetZoom()" data-i18n="zoom_reset">Reset</button>
     </div>
 
     <div id="exploreLayout">
@@ -130,16 +131,18 @@
         </div>
         <div id="resultsTableWrapper">
             <table id="resultsTable">
-                <thead><tr><th>Nickname</th><th>Deg.</th><th>Yak.</th></tr></thead>
+                <thead><tr><th data-i18n="th_nickname">Nickname</th><th data-i18n="th_deg">Deg.</th><th data-i18n="th_yak">Yak.</th></tr></thead>
                 <tbody id="resultsTableBody"></tbody>
             </table>
         </div>
     </div>
 
-    <button class="button" onclick="location.href='index.html';" style="background-color: #2196f3; margin-top:8px;">Home</button> <br>
-    <button class="button" onclick="location.href='instructions.html';" style="background-color: #4caf50; margin-top:8px;">Take the Quiz</button> <br>
+    <button class="button" onclick="location.href='index.html';" style="background-color: #2196f3; margin-top:8px;" data-i18n="home">Home</button> <br>
+    <button class="button" onclick="location.href='instructions.html';" style="background-color: #4caf50; margin-top:8px;" data-i18n="take_quiz">Take the Quiz</button> <br>
 
     <script>
+    injectLangToggle();
+    applyTranslations();
     var zoomIn, zoomOut, resetZoom;
     (function() {
         var canvas = document.getElementById("exploreCanvas");
@@ -334,14 +337,14 @@
             var img = new Image();
             img.onload = function() { backgroundImg = img; callback(); };
             img.onerror = function() { callback(); };
-            img.src = "./compass.png";
+            img.src = getLang() === 'ja' ? './compass_ja.png' : './compass.png';
         }
 
         function fetchResults() {
             if (!SHARE_CONFIG.enabled) {
                 loadingText.textContent = "";
                 errorText.style.display = "block";
-                errorText.textContent = "Community sharing is not configured yet.";
+                errorText.textContent = t("sharing_not_configured");
                 return;
             }
 
@@ -351,7 +354,7 @@
                 loadingText.style.display = "none";
                 if (!data.results || data.results.length === 0) {
                     errorText.style.display = "block";
-                    errorText.textContent = "No results shared yet. Be the first!";
+                    errorText.textContent = t("no_results");
                     errorText.style.color = "#555";
                     canvas.style.display = "block";
                     zoomControls.style.display = "block";
@@ -359,7 +362,7 @@
                     return;
                 }
 
-                statsBar.textContent = data.results.length + " results shared by the community";
+                statsBar.textContent = t("n_results_shared", {n: data.results.length});
 
                 for (var i = 0; i < data.results.length; i++) {
                     var r = data.results[i];
@@ -381,7 +384,7 @@
             .catch(function() {
                 loadingText.style.display = "none";
                 errorText.style.display = "block";
-                errorText.textContent = "Failed to load results. Please try again later.";
+                errorText.textContent = t("load_failed");
             });
         }
 
