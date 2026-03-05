@@ -2,7 +2,7 @@ questions =  [
     {"id": 1, "question": "I view the seiyuu primarily as talented artists and professionals, not as objects for my personal fantasy.", "effects": {"degenerate": -1}},
     {"id": 2, "question": "Fans who make inappropriate sexual comments about the cast on Discord or Twitter should be completely shunned by the community.", "effects": {"degenerate": -1}},
     {"id": 3, "question": "Holding more than one standard electronic penlight to a concert is completely unnecessary and excessive.", "effects": {"yakkai": -1}},
-    {"id": 4    , "question": "When a seiyuu bends down on stage, reaching for binoculars is a completely natural reaction.", "effects": {"degenerate": 1}},
+    {"id": 4, "question": "When a seiyuu bends down on stage, reaching for binoculars is a completely natural reaction.", "effects": {"degenerate": 1}},
     {"id": 5, "question": "Jumping or vigorously waving a penlight to the beat is distracting; fans should just watch the stage quietly.", "effects": {"yakkai": -1}},
     {"id": 6, "question": "I attend lives primarily to appreciate the vocal talents, choreography, and the live band, rather than to glaze at the cast.", "effects": {"degenerate": -1}},
     {"id": 7, "question": "I've spent more time analyzing fanservice screenshots of my oshi than actually listening to the music.", "effects": {"degenerate": 1}},
