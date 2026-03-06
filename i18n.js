@@ -227,10 +227,10 @@ var TRANSLATIONS = {
 function getLang() {
     var supported = ["en", "ja", "zh-CN"];
     try {
-        var lang = localStorage.getItem("llv_lang") || "en";
-        return supported.indexOf(lang) !== -1 ? lang : "en";
+        var lang = localStorage.getItem("llv_lang") || "zh-CN";
+        return supported.indexOf(lang) !== -1 ? lang : "zh-CN";
     } catch (e) {
-        return "en";
+        return "zh-CN";
     }
 }
 
