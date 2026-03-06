@@ -25,8 +25,8 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
 
-    // Sanitize nickname - remove anything that's not alphanumeric, spaces, or basic punctuation
-    nickname = nickname.replace(/[^\w\s\-_.!?]/g, "");
+    // Sanitize nickname - remove control characters and dangerous characters, but keep Unicode letters/numbers
+    nickname = nickname.replace(/[\x00-\x1f\x7f<>\"'`=;(){}[\]\\\/]/g, "");
 
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
 
