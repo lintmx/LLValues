@@ -9,6 +9,7 @@
     <script src="i18n.js"></script>
     <script type="application/javascript" src="questions_feedback.js"></script>
     <script type="application/javascript" src="questions_feedback_ja.js"></script>
+    <script type="application/javascript" src="questions_feedback_zh_cn.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -73,6 +74,8 @@
         var qText = current.question;
         if (getLang() === 'ja' && questions_feedback_ja && questions_feedback_ja[qId] && questions_feedback_ja[qId].question) {
             qText = questions_feedback_ja[qId].question;
+        } else if (getLang() === 'zh-CN' && questions_feedback_zh_cn && questions_feedback_zh_cn[qId] && questions_feedback_zh_cn[qId].question) {
+            qText = questions_feedback_zh_cn[qId].question;
         }
         document.getElementById("question-text").innerHTML = qText;
         document.getElementById("question-number").innerHTML = t("question_n_of_m", {n: qn + 1, m: questionsOrder.length});
@@ -213,6 +216,8 @@
         var qId = questionsOrder[qn];
         if (getLang() === 'ja' && questions_feedback_ja && questions_feedback_ja[qId] && questions_feedback_ja[qId].answers && questions_feedback_ja[qId].answers[label]) {
             label = questions_feedback_ja[qId].answers[label];
+        } else if (getLang() === 'zh-CN' && questions_feedback_zh_cn && questions_feedback_zh_cn[qId] && questions_feedback_zh_cn[qId].answers && questions_feedback_zh_cn[qId].answers[label]) {
+            label = questions_feedback_zh_cn[qId].answers[label];
         }
         btn.textContent = label;
         if (buttonInfo["effect"] === null || Number.isInteger(buttonInfo["effect"])) {

@@ -9,6 +9,7 @@
     <script src="i18n.js"></script>
     <script type="application/javascript" src="questions.js"></script>
     <script type="application/javascript" src="questions_ja.js"></script>
+    <script type="application/javascript" src="questions_zh_cn.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -71,6 +72,8 @@
         var qText = questionsObject[qId].question;
         if (getLang() === 'ja' && questions_ja && questions_ja[qId]) {
             qText = questions_ja[qId];
+        } else if (getLang() === 'zh-CN' && questions_zh_cn && questions_zh_cn[qId]) {
+            qText = questions_zh_cn[qId];
         }
         document.getElementById("question-text").innerHTML = qText;
         document.getElementById("question-number").innerHTML = t("question_n_of_m", {n: qn + 1, m: questionsOrder.length});

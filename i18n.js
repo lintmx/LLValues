@@ -147,12 +147,88 @@ var TRANSLATIONS = {
         click_to_choose: "クリックして選択",
         next_button: "次へ！",
         feedback_initial_question: "このテストを真剣に（少なくとも皮肉でなく）受けましたか？"
+    },
+    "zh-CN": {
+        // Landing page
+        start_button: "点击开始测试！",
+        explore_button: "查看社区结果",
+        what_is: "什么是 LoveLiveValues？",
+        description_para1: 'LoveLiveValues 是一个面向 Love Live 粉丝与演唱会参与者的“坐标测试”。灵感来自 <a href="http://sapplypoliticalcompass.com/">SapplyValues</a>，会根据你的观点与现场行为将你定位在两个轴上。',
+        description_para2: "你会看到一系列陈述。请从<b>非常同意</b>到<b>非常不同意</b>进行选择，你的回答将决定你在坐标图上的位置。",
+        num_questions: "本测试共有 <b><u>{n}</u></b> 道题。",
+        axes_title: "两个轴",
+        deg_vs_civ_title: "变态 vs. 文明（X 轴）",
+        deg_vs_civ_deg: "<b>变态</b> &mdash; 你会过度迷恋偶像、评论身体部位、发“想被她踩”等发言，看到照片就只会“哇啊啊啊”而没有实际内容，整体上就是“痴迷粉”的典型。",
+        deg_vs_civ_civ: "<b>文明</b> &mdash; 你会在保持克制的前提下欣赏偶像与演出，不会陷入无脑吹捧或失控发言。",
+        yak_vs_bor_title: "厄介 vs. 木桩（Y 轴）",
+        yak_vs_bor_yak: '<b>厄介</b> &mdash; 你会喊“イエッタイガー”、打 “tora hi jinzou seni ama shindou kasen” 等 MIX、ガチ恋口上、3 连可变等在 3D 偶像场景常见但在 Love Live 现场常被反感的 call。慢歌时大家都在摇蓝色你却折 UO（超橙），平稳段落还在头顶疯狂转灯，常让身边连番不适。',
+        yak_vs_bor_bor: "<b>木桩</b> &mdash; 你不跳、不折 UO，只是站着轻轻挥电棒，连 hai call、PPPH、fuwa fuwa 这些经典 call 都不做。人到了现场但几乎不参与。",
+
+        // Instructions
+        instructions_title: "说明",
+        instructions_text: "你会看到一系列陈述。请点击最符合你看法的按钮。",
+        proceed_shuffled: "继续（随机顺序）",
+        proceed_unshuffled: "继续（原顺序）",
+        go_back: "返回",
+
+        // Quiz
+        question_n_of_m: "第 {n} 题 / 共 {m} 题",
+        strongly_agree: "非常同意",
+        agree: "同意",
+        neutral: "中立 / 不确定",
+        disagree: "不同意",
+        strongly_disagree: "非常不同意",
+        back: "返回",
+
+        // Results
+        results_title: "结果",
+        enter_nickname: "输入昵称以查看你的结果",
+        nickname_placeholder: "昵称（必填）",
+        nickname_error: "请输入昵称。",
+        submit: "提交",
+        submitting: "提交中...",
+        hint_download: "提示：你可以直接下载这张图片，无需截图！",
+        hint_twitter_image: "如需在 X/Twitter 分享图片，请先下载图片，再手动附加到推文中。",
+        compass_x_axis: "变态 / 文明 轴 (x): ",
+        compass_y_axis: "厄介 / 木桩 轴 (y): ",
+        network_error: "网络错误，请重试。",
+        results_back: "返回",
+        results_explore: "查看社区结果",
+        share_twitter: "分享到 X",
+        share_tweet_text: "我的 LoveLiveValues 结果：变态/文明 {x}，厄介/木桩 {y}！来测测看：",
+
+        // Explore
+        explore_title: "探索",
+        loading_results: "正在加载社区结果...",
+        th_nickname: "昵称",
+        th_deg: "变态",
+        th_yak: "厄介",
+        home: "主页",
+        take_quiz: "开始测试",
+        n_results_shared: "社区已分享 {n} 条结果",
+        no_results: "还没有人分享结果，快来当第一个！",
+        sharing_not_configured: "社区分享功能尚未配置。",
+        load_failed: "结果加载失败，请稍后再试。",
+        zoom_reset: "重置",
+
+        // Feedback
+        all_done: "完成！",
+        see_results: "查看我的结果！",
+        do_quiz: "去做测试！",
+        go_button: "确定！",
+        refuse: "拒绝回答",
+        refuse_dont_know: "拒绝回答 / 不知道",
+        click_to_choose: "点击选择",
+        next_button: "下一步！",
+        feedback_initial_question: "你是否以认真（至少不是反讽）的态度完成了这份测试？"
     }
 };
 
 function getLang() {
+    var supported = ["en", "ja", "zh-CN"];
     try {
-        return localStorage.getItem("llv_lang") || "en";
+        var lang = localStorage.getItem("llv_lang") || "en";
+        return supported.indexOf(lang) !== -1 ? lang : "en";
     } catch (e) {
         return "en";
     }
@@ -191,11 +267,20 @@ function applyTranslations() {
 }
 
 function injectLangToggle() {
+    var langOrder = ["en", "ja", "zh-CN"];
+    var nextLabel = {
+        en: "日本語",
+        ja: "简体中文",
+        "zh-CN": "English"
+    };
     var btn = document.createElement("button");
     btn.id = "langToggle";
-    btn.textContent = getLang() === "ja" ? "English" : "\u65E5\u672C\u8A9E";
+    var currentLang = getLang();
+    var currentIndex = langOrder.indexOf(currentLang);
+    var nextIndex = (currentIndex + 1) % langOrder.length;
+    btn.textContent = nextLabel[currentLang];
     btn.addEventListener("click", function () {
-        setLang(getLang() === "ja" ? "en" : "ja");
+        setLang(langOrder[nextIndex]);
         location.reload();
     });
     document.body.appendChild(btn);
