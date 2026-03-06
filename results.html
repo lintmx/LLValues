@@ -32,9 +32,11 @@
 
     <div id="resultsSection" style="display:none;">
         <img src="" id="banner" style="max-width:70%;height:auto;display:block;margin:0 auto"></canvas></br>
-        <p style="text-align:center;margin:-2px auto" data-i18n="hint_download">Hint: you can download this image directly. No need to screenshot!</p></br>
+        <p style="text-align:center;margin:-2px auto" data-i18n="hint_download">Hint: you can download this image directly. No need to screenshot!</p>
+        <p style="text-align:center;margin:4px auto;font-size:12pt;color:#777;" data-i18n="hint_twitter_image">To share the image on X/Twitter, download it first and attach it manually to your tweet.</p></br>
         <button class="button" onclick="location.href='index.html';" style="background-color: #2196f3;" data-i18n="results_back">Back</button> <br>
         <button class="button" onclick="location.href='explore.html';" style="background-color: #9c27b0; margin-top:8px;" id="exploreBtn" data-i18n="results_explore">Explore Community Results</button> <br>
+        <button class="button" id="twitterShareBtn" style="background-color: #000000; margin-top:8px;" data-i18n="share_twitter">Share to X</button> <br>
     </div>
 
 
@@ -92,6 +94,13 @@
                 document.getElementById("shareSection").style.display = "none";
                 document.getElementById("resultsSection").style.display = "block";
             }
+
+            document.getElementById("twitterShareBtn").addEventListener("click", function() {
+                var text = t("share_tweet_text", {x: x_axis, y: y_axis});
+                var url = "https://eyalmazuz.github.io/LLValues/";
+                var twitterUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url) + "&hashtags=" + encodeURIComponent("LoveLiveValues");
+                window.open(twitterUrl, "_blank");
+            });
 
             if (!isNaN(rawDegenerate) && !isNaN(rawYakkai)) {
                 var shareKey = "shared_" + rawDegenerate + "_" + rawYakkai;

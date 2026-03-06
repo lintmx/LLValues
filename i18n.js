@@ -40,11 +40,14 @@ var TRANSLATIONS = {
         submit: "Submit",
         submitting: "Submitting...",
         hint_download: "Hint: you can download this image directly. No need to screenshot!",
+        hint_twitter_image: "To share the image on X/Twitter, download it first and attach it manually to your tweet.",
         compass_x_axis: "Degenerate / Civilzed Axis (x): ",
         compass_y_axis: "Yakkai / Boring Axis (y): ",
         network_error: "Network error. Please try again.",
         results_back: "Back",
         results_explore: "Explore Community Results",
+        share_twitter: "Share to X",
+        share_tweet_text: "My LoveLiveValues result: Degenerate/Civilized {x}, Yakkai/Boring {y}! Take the quiz:",
 
         // Explore
         explore_title: "Explore",
@@ -111,11 +114,14 @@ var TRANSLATIONS = {
         submit: "送信",
         submitting: "送信中...",
         hint_download: "ヒント：この画像は直接ダウンロードできます。スクリーンショットは不要です！",
+        hint_twitter_image: "X/Twitterで画像をシェアするには、まず画像をダウンロードしてツイートに手動で添付してください。",
         compass_x_axis: "変態 / 紳士的 軸 (x): ",
         compass_y_axis: "厄介 / 地蔵軸 (y): ",
         network_error: "ネットワークエラー。もう一度お試しください。",
         results_back: "戻る",
         results_explore: "コミュニティの結果を見る",
+        share_twitter: "Xでシェア",
+        share_tweet_text: "LoveLiveValuesの結果：変態/紳士的 {x}、厄介/地蔵 {y}！あなたもやってみよう：",
 
         // Explore
         explore_title: "探索",
